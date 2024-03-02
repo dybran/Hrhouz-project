@@ -1,35 +1,46 @@
-name: Build and Deploy
+name: Build and Push Docker Image
 
 on:
   push:
     branches: [ main ]
 
 jobs:
-  build-and-deploy:
+  build-and-push:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-west-1
+          aws-region: ${{ secrets.AWS_REGION }}
+          access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-      - name: Login to AWS ECR
-        uses: aws-actions/amazon-ecr-login@v2
-        with:
-          region: us-west-1 
-          role-arn: arn:aws:iam::939895954199:role/ecr_role
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build Docker image
-        run: docker build -t 939895954199.dkr.ecr.us-west-1.amazonaws.com/hrhouz-img:v1 .
+      - name: Get commit SHA
+        id: get-sha
+        run: |
+          echo "COMMIT_SHA=$(git rev-parse --short HEAD)"
+          echo "::set-output name=SHA::$COMMIT_SHA"
 
-      - name: Tag the image for ECR
-        run: docker tag 939895954199.dkr.ecr.us-west-1.amazonaws.com/hrhouz-img:v1 939895954199.dkr.ecr.us-west-1.amazonaws.com/hrhouz-img:latest
+      - name: Build and tag the image
+        run: |
+          docker build -t ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest-$COMMIT_SHA .
+          docker tag ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest-$COMMIT_SHA ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:$COMMIT_SHA
 
-      - name: Push image to ECR
-        run: docker push 939895954199.dkr.ecr.us-west-1.amazonaws.com/hrhouz-img:latest
+      - name: Push the image to ECR
+        run: |
+          docker push ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest-$COMMIT_SHA
+          docker push ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:$COMMIT_SHA
+
+      - name: Remove local image
+        run: docker image rm ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest-$COMMIT_SHA
+
+
 
 
