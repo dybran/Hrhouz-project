@@ -30,16 +30,16 @@ jobs:
 
       - name: Build and tag the image
         run: |
-          docker build -t ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest-$COMMIT_SHA .
-          docker tag ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest-$COMMIT_SHA ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:$COMMIT_SHA
+          docker build -t ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:latest-$COMMIT_SHA .
+          docker tag ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:latest-$COMMIT_SHA ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:$COMMIT_SHA
 
       - name: Push the image to ECR
         run: |
-          docker push ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest-$COMMIT_SHA
-          docker push ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:$COMMIT_SHA
+          docker push ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:latest-$COMMIT_SHA
+          docker push ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:$COMMIT_SHA
 
       - name: Remove local image
-        run: docker image rm ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY_NAME }}:latest-$COMMIT_SHA
+        run: docker image rm ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:latest-$COMMIT_SHA
 
 
 
