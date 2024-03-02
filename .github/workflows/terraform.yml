@@ -35,11 +35,11 @@ jobs:
       - name: Validate Terraform
         run: terraform validate
 
-      - name: Terraform Plan (Optional)
+      - name: Terraform Plan
         if: github.event_name == 'push'
         run: terraform plan -auto-approve
 
-      - name: Terraform Apply (Optional)
+      - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve
 

@@ -22,4 +22,12 @@ resource "aws_security_group" "hrhouz_sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
+  tags = merge(
+    var.tags,
+    {
+      Name = format("%s-sg", var.name)
+    }
+  )
+
 }
