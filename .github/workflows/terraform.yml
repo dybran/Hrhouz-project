@@ -25,19 +25,24 @@ jobs:
           echo "AWS_REGION: ${{ secrets.AWS_REGION }}"
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
+          # aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Terraform Init
+      - name: Init Terraform
         run: terraform init
 
-      - name: Terraform Plan
-        run: terraform plan -out=tfplan
+      - name: Validate Terraform
+        run: terraform validate
 
-      - name: Terraform Apply
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: terraform apply -auto-approve tfplan
+      - name: Terraform Plan (Optional)
+        if: github.event_name == 'push'
+        run: terraform plan -auto-approve
+
+      - name: Terraform Apply (Optional)
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terraform apply -auto-approve
+
 
