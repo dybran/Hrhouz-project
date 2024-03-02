@@ -29,7 +29,6 @@ jobs:
         run: docker tag 939895954199.dkr.ecr.us-west-1.amazonaws.com/hrhouz-img:v1 939895954199.dkr.ecr.us-west-1.amazonaws.com/hrhouz-img:latest
 
       - name: Push image to ECR
-        # run: docker push 939895954199.dkr.ecr.us-west-1.amazonaws.com/hrhouz-img:v1
         run: docker push 939895954199.dkr.ecr.us-west-1.amazonaws.com/hrhouz-img:latest
 
 
