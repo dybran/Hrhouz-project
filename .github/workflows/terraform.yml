@@ -38,10 +38,10 @@ jobs:
 
       - name: Terraform Plan
         if: github.event_name == 'push'
-        run: terraform plan -auto-approve -var "aws_region=${{ env.AWS_REGION }}"
+        run: terraform plan -auto-approve -var "aws-region=${{ env.AWS_REGION }}"
 
       - name: Terraform Apply (Optional)
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform apply -auto-approve -var "aws_region=${{ env.AWS_REGION }}"
+        run: terraform apply -auto-approve -var "aws-region=${{ env.AWS_REGION }}"
 
 
