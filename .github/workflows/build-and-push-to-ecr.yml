@@ -1,4 +1,47 @@
-name: Build and Push Docker Image to ECR
+# name: Build and Push Docker Image to ECR
+
+# on:
+#   push:
+#     branches: [ main ]
+
+# jobs:
+#   build-and-push:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v3
+
+#       - name: Configure AWS credentials
+#         uses: aws-actions/configure-aws-credentials@v4
+#         with:
+#           aws-region: ${{ vars.AWS_REGION }}
+#           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+#       - name: Login to Amazon ECR
+#         id: login-ecr
+#         uses: aws-actions/amazon-ecr-login@v1
+
+#       - name: Get commit SHA
+#         id: get-sha
+#         run: |
+#           echo "COMMIT_SHA=$(git rev-parse --short HEAD)"
+#           echo "::set-output name=SHA::$COMMIT_SHA"
+
+#       - name: Build and tag the image
+#         run: |
+#           docker build -t ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:latest-$COMMIT_SHA .
+#           docker tag ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:latest-$COMMIT_SHA ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:$COMMIT_SHA
+
+#       - name: Push the image to ECR
+#         run: |
+#           docker push ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:latest-$COMMIT_SHA
+#           docker push ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:$COMMIT_SHA
+
+#       - name: Remove local image
+#         run: docker image rm ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:latest-$COMMIT_SHA
+
+name: Build and Push Docker Image to ECR with Versioning
 
 on:
   push:
@@ -8,10 +51,10 @@ jobs:
   build-and-push:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+        name: Checkout Code
 
-      - name: Configure AWS credentials
+      - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: ${{ vars.AWS_REGION }}
@@ -22,25 +65,34 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Get commit SHA
-        id: get-sha
+      - name: Retrieve Version and SHA
+        id: get-version-and-sha
         run: |
-          echo "COMMIT_SHA=$(git rev-parse --short HEAD)"
+          # Get commit SHA
+          COMMIT_SHA=$(git rev-parse --short HEAD)
           echo "::set-output name=SHA::$COMMIT_SHA"
 
-      - name: Build and tag the image
+          # Get version from environment variable or Git tag (modify as needed)
+          if [ -n "${{ vars.VERSION }}" ]; then
+            VERSION=${{ vars.VERSION }}
+          else
+            VERSION=$(git describe --tags $(git rev-list --tags --max-count=1))
+            VERSION=${VERSION#v}  # Remove leading "v" from tag
+          fi
+          echo "::set-output name=VERSION::$VERSION"
+
+      - name: Build and Tag Image with Version
         run: |
-          docker build -t ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:latest-$COMMIT_SHA .
-          docker tag ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:latest-$COMMIT_SHA ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:$COMMIT_SHA
+          docker build -t ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:$VERSION .
+          docker tag ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:$VERSION ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:latest
 
-      - name: Push the image to ECR
+      - name: Push Image to ECR
         run: |
-          docker push ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:latest-$COMMIT_SHA
-          docker push ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:$COMMIT_SHA
+          docker push ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:$VERSION
+          docker push ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:latest
 
-      - name: Remove local image
-        run: docker image rm ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:latest-$COMMIT_SHA
-
+      - name: Clean Up Local Image
+        run: docker image rm ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:$VERSION
 
 
 
