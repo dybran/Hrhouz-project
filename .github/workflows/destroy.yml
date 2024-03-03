@@ -1,11 +1,10 @@
-name: Destroy
+name: Destroy Infrastructure
 
 on:
   workflow_dispatch:
-    branches: [ main ]
 
 jobs:
-  terraform-destroy:
+  destroy:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,7 +17,16 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.6.2
 
-      - name: Destroy Terraform resources
-        run: terraform destroy
+      - name: Initialize Terraform
+        run: terraform init
         working-directory: ./hrhouz-terraform
+
+      - name: Destroy Infrastructure
+        run: terraform destroy -auto-approve # Use with caution!
+        working-directory: ./hrhouz-terraform
+
