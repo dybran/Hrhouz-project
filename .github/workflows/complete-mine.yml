@@ -86,7 +86,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   
       - name: Update ECS Task Definition
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v3
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
         with:
           cluster: hrhouz-cluster
       
