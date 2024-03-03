@@ -7,39 +7,38 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Login to AWS
-        uses: aws-actions/aws-ec2-login@v1
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: your-aws-region
+          role-to-assume: arn:aws:iam::YOUR_ACCOUNT_ID:role/your-role-name
 
-      - name: Get public IP of EC2 instance (using instance tags)
-        id: ec2-public-ip
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Get image tag
+        id: image-tag
+        run: echo ${{ github.sha }}
+
+      - name: Pull container image
         run: |
-          # Filter instances based on desired tag (replace 'Name' with your tag key)
-          aws ec2 describe-instances --filters "Name=tag:Name,Values=hrhouz-server" | jq -r '.Reservations[].Instances[].PublicIpAddress'
+          docker pull ${{ steps.ecr-login.outputs.registry }}/your-ecr-repo:${{ steps.image-tag.outputs }}
 
-      - name: Install dependencies on EC2 (using SSM)
-        uses: aws-actions/aws-ssm-run-command@v1
+      - name: Connect to EC2 instance
+        uses: ttnsk1/aws-ec2-run-user-shell@v2
         with:
-          name: "Install dependencies"
-          instance-ids: ${{ steps.ec2-public-ip.outputs.publicIp }}
-          commands: |
-            sudo apt-get update
-            sudo apt-get install -y awscli docker.io
+          instance-id: your-ec2-instance-id
+          user: your-ec2-username
+          key: ${{ secrets.PEM_KEY }}  # Replace with your PEM key secret
 
-      - name: Pull image from ECR
+      - name: Run container
         run: |
-          aws ecr get-repository-policy --repository-name ${{ vars.ECR_REPOSITORY_NAME }} | jq -r '.repositoryUri' | xargs -I {} docker pull {}
+          docker run -d ${{ steps.ecr-login.outputs.registry }}/your-ecr-repo:${{ steps.image-tag.outputs }}
 
-      - name: Run container (using SSM)
-        uses: aws-actions/aws-ssm-run-command@v1
-        with:
-          name: "Run container"
-          instance-ids: ${{ steps.ec2-public-ip.outputs.publicIp }}
-          commands: |
-            docker run -d ${{ steps.image-uri.outputs.imageUri }}
+      - name: Disconnect from EC2 instance
+        run: exit
+
