@@ -9,7 +9,7 @@ resource "aws_ecs_cluster" "hrhouz_cluster" {
   name = "hrhouz-cluster"
 }
 
-# Define the Task Definition (replace with your container image details)
+# Define the Task Definition
 resource "aws_ecs_task_definition" "hrhouz_task_definition" {
   family = "hrhouz-task-definition"
   cpu    = "256"

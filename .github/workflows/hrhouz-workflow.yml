@@ -1,4 +1,4 @@
-name: Full Worflow
+name: Hrhouz Workflow
 
 on:
   workflow_dispatch:
