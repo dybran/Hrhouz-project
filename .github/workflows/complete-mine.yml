@@ -114,7 +114,7 @@ jobs:
       - name: Deploy Image to EC2
         run: |
           aws ssm send-command \
-            --command-document-name AWS-RunShellScript \
+            --document-name AWS-RunShellScript \
             --instance-ids ${{ env.INSTANCE_ID }} \
             --parameters \
               entries[0].key=commands \
