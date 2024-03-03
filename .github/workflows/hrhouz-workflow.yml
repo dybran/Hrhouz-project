@@ -38,7 +38,7 @@ jobs:
         run: terraform apply PLAN
         working-directory: ./hrhouz-terraform
 
-  build-and-push:
+  build-push-run:
     runs-on: ubuntu-latest
     needs: terraform
 
