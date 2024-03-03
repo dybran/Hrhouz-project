@@ -73,7 +73,7 @@ jobs:
 
           # Get version from environment variable or Git tag (modify as needed)
           if [ -n "${{ vars.VERSION }}" ]; then # Check if VERSION env var is set
-            VERSION=${{ vars.VERSION }}  # Use it if available
+            VERSION=${{ vars.VERSION }}  # Use the version
           else
             VERSION=$(git describe --tags $(git rev-list --tags --max-count=1))
             VERSION=${VERSION#v}  # Remove leading "v" if present
