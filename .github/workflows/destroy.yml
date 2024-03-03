@@ -23,10 +23,6 @@ jobs:
         with:
           terraform_version: 1.6.2
 
-      - name: Initialize Terraform
-        run: terraform init
-        working-directory: ./hrhouz-terraform
-
       - name: Destroy Terraform resources
         run: terraform destroy
         working-directory: ./hrhouz-terraform
