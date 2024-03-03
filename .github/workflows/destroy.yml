@@ -1,12 +1,11 @@
-name: Plan and Apply
+name: Destroy
 
 on:
   workflow_dispatch:
     branches: [ main ]
 
-
 jobs:
-  terraform:
+  terraform-destroy:
     runs-on: ubuntu-latest
 
     steps:
@@ -28,15 +27,6 @@ jobs:
         run: terraform init
         working-directory: ./hrhouz-terraform
 
-      - name: Plan Terraform changes
-        run: terraform plan -out=PLAN
+      - name: Destroy Terraform resources
+        run: terraform destroy
         working-directory: ./hrhouz-terraform
-        
-
-      - name: Terraform Apply
-        id: apply
-        run: terraform apply PLAN
-        working-directory: ./hrhouz-terraform
-
-
-
