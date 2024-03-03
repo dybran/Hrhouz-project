@@ -73,8 +73,8 @@ jobs:
           echo "::set-output name=SHA::$COMMIT_SHA"
 
           # Get version from environment variable or Git tag (modify as needed)
-          if [ -n "${{ vars.VERSION }}" ]; then
-            VERSION=${{ vars.VERSION }}
+          if [ -n "${{ env.VERSION }}" ]; then
+            VERSION=${{ env.VERSION }}
           else
             VERSION=$(git describe --tags $(git rev-list --tags --max-count=1))
             VERSION=${VERSION#v}  # Remove leading "v" from tag
@@ -93,6 +93,7 @@ jobs:
 
       - name: Clean Up Local Image
         run: docker image rm ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:$VERSION
+
 
 
 
