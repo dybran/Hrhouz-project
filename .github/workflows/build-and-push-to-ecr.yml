@@ -71,10 +71,11 @@ jobs:
           COMMIT_SHA=$(git rev-parse --short HEAD)
           echo "COMMIT_SHA=$COMMIT_SHA"
 
-          # Always use version from Git tag
-          VERSION=$(git describe --tags $(git rev-list --tags --max-count=1))
-          VERSION=${VERSION#v}  # Remove leading "v" if present
+          # Use commit SHA for version
+          VERSION=$COMMIT_SHA
+
           echo "VERSION=$VERSION"
+
 
 
 
