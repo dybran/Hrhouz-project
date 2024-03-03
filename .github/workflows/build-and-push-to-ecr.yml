@@ -66,15 +66,15 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
 
       - name: Retrieve Version and SHA
-        id: get-version-and-sha
+        id: get-sha
         run: |
           # Get commit SHA
           COMMIT_SHA=$(git rev-parse --short HEAD)
           echo "::set-output name=SHA::$COMMIT_SHA"
-
+      
           # Get version from environment variable or Git tag (modify as needed)
-          if [ -n "${{ env.VERSION }}" ]; then
-            VERSION=${{ env.VERSION }}
+          if [ -n "${{ vars.VERSION }}" ]; then
+            VERSION=${{ vars.VERSION }}
           else
             VERSION=$(git describe --tags $(git rev-list --tags --max-count=1))
             VERSION=${VERSION#v}  # Remove leading "v" from tag
