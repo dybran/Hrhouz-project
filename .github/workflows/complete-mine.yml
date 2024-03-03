@@ -1,4 +1,4 @@
-name: Plan and Apply
+name: Full Worflow
 
 on:
   workflow_dispatch:
