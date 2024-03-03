@@ -27,6 +27,6 @@ jobs:
         working-directory: ./hrhouz-terraform
 
       - name: Destroy Infrastructure
-        run: terraform destroy -auto-approve # Use with caution!
+        run: terraform destroy -auto-approve
         working-directory: ./hrhouz-terraform
 
