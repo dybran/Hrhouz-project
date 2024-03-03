@@ -4,12 +4,12 @@ variable "region" {
 }
 
 variable "name" {
-  type    = string
+  type        = string
   description = "default name"
 }
 
 variable "instance-type" {
-  type    = string
+  type        = string
   description = "instance type"
 }
 

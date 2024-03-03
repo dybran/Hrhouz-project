@@ -1,11 +1,11 @@
 
 # Create an EC2 instance
 resource "aws_instance" "hrhouz-server" {
-  ami           = "ami-02bfcfbf6fc7e8ce4"
-  instance_type = var.instance-type
-  key_name        = var.keypair
-  security_groups = [aws_security_group.hrhouz_sg.name]
-  iam_instance_profile = aws_iam_instance_profile.hrhouz.name
+  ami                  = "ami-02bfcfbf6fc7e8ce4"
+  instance_type        = var.instance-type
+  key_name             = var.keypair
+  security_groups      = [aws_security_group.hrhouz_sg.name]
+  iam_instance_profile = aws_iam_instance_profile.hr-houz.name
 
   tags = merge(
     var.tags,
@@ -16,8 +16,8 @@ resource "aws_instance" "hrhouz-server" {
 }
 
 # Create an IAM instance profile and attach the EC2 role
-resource "aws_iam_instance_profile" "hrhouz" {
-  name = "hrhouz"
+resource "aws_iam_instance_profile" "hr-houz" {
+  name = "hr-houz"
   role = aws_iam_role.ec2_role.name
 }
 
