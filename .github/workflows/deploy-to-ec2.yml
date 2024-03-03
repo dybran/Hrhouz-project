@@ -1,0 +1,51 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Login to AWS
+        uses: aws-actions/aws-login@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Get public IP of EC2 instance
+        id: ec2-public-ip
+        run: |
+          aws ec2 describe-instances | jq -r '.Reservations[].Instances[].PublicIpAddress'
+
+      - name: Install dependencies on EC2 (Ubuntu)
+        uses: nyancat/ec2-ssh@v1
+        with:
+          instance-id: ${{ steps.ec2-public-ip.outputs.publicIp }}  # Replaced with dynamic IP retrieval
+          private-key-file: $YOUR_SSH_KEY_PATH
+          user: ubuntu
+          script: |
+            sudo apt-get update
+            sudo apt-get install -y awscli docker.io
+
+      - name: Pull image from ECR
+        run: |
+          aws ecr get-repository-policy --repository-name $YOUR_ECR_REPOSITORY_NAME | jq -r '.repositoryUri' | xargs -I {} docker pull {}
+
+      - name: Run container
+        run: |
+          ssh -o StrictHostKeyChecking=no $YOUR_SSH_KEY_PATH ubuntu@${{ steps.ec2-public-ip.outputs.publicIp }} docker run -d ${{ steps.image-uri.outputs.imageUri }}
+
+
+======================
+
+# GitHub Action script for deploying image and running container from ECR to EC2
+# This script assumes the following:
+
+# You have an ECR repository with your desired image.
+# You have an EC2 instance with the aws CLI and Docker installed and configured with appropriate IAM permissions.
+# Your AWS credentials are stored as secrets in your GitHub repository: AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY.
