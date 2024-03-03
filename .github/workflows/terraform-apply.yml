@@ -29,9 +29,9 @@ jobs:
         working-directory: ./hrhouz-terraform
 
       - name: Plan Terraform changes
-        run: terraform plan
+        run: terraform plan -out=PLAN
         working-directory: ./hrhouz-terraform
-        -out=PLAN
+        
 
       - name: Terraform Apply
         id: apply
