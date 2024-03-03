@@ -71,25 +71,25 @@ jobs:
           COMMIT_SHA=$(git rev-parse --short HEAD)
           echo "COMMIT_SHA=$COMMIT_SHA"
 
-          # # Use commit SHA for version
-          # VERSION=$COMMIT_SHA
+          # Use commit SHA for version
+          VERSION=$COMMIT_SHA
 
-          # echo "VERSION=$VERSION"
+          echo "VERSION=$VERSION"
 
 
       - name: Build and Tag Image with Version
         run: |
-          docker build -t ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:$COMMIT_SHA .
-          docker tag ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:$COMMIT_SHA ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:latest
+          docker build -t ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:$VERSION .
+          docker tag ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:$VERSION ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:latest
 
       - name: Push Image to ECR
         run: |
-          docker push ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:$COMMIT_SHA
+          docker push ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:$VERSION
           docker push ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:latest
 
       - name: Clean Up Local Image
         run: |
-          docker image rm ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:$COMMIT_SHA
+          docker image rm ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:$VERSION
           docker image rm ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:latest
 
 
