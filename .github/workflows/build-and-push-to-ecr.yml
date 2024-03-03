@@ -71,14 +71,11 @@ jobs:
           COMMIT_SHA=$(git rev-parse --short HEAD)
           echo "COMMIT_SHA=$COMMIT_SHA"
 
-          # Get version from environment variable or Git tag (modify as needed)
-          if [ -n "${{ vars.VERSION }}" ]; then # Check if VERSION env var is set
-            VERSION=${{ vars.VERSION }}  # Use the version
-          else
-            VERSION=$(git describe --tags $(git rev-list --tags --max-count=1))
-            VERSION=${VERSION#v}  # Remove leading "v" if present
-          fi
+          # Always use version from Git tag
+          VERSION=$(git describe --tags $(git rev-list --tags --max-count=1))
+          VERSION=${VERSION#v}  # Remove leading "v" if present
           echo "VERSION=$VERSION"
+
 
 
       - name: Build and Tag Image with Version
