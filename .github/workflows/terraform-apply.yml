@@ -35,8 +35,8 @@ jobs:
       - name: Apply Terraform changes (automatic approval)
         run: terraform apply
         working-directory: ./hrhouz-terraform
-        env:
-          TF_IN_AUTOMATION: true
+        # env:
+        #   TF_IN_AUTOMATION: true
 
 
 
