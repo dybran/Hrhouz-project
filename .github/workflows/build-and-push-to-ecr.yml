@@ -89,8 +89,8 @@ jobs:
 
       - name: Clean Up Local Image
         run: |
-        docker image rm ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:$COMMIT_SHA
-        docker image rm ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:latest
+          docker image rm ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:$COMMIT_SHA
+          docker image rm ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:latest
 
 
 
