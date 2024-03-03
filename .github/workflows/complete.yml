@@ -36,16 +36,16 @@ jobs:
           -var="private_key=$PRIVATE_SSH_KEY" \
           -var="key_name=deployer-key" \
           -out=PLAN
-        working-directory: ./terraform
+        working-directory: ./hrhouz-terraform
       - name: Terraform Apply
         id: apply
         run: terraform apply PLAN
-        working-directory: ./terraform
+        working-directory: ./hrhouz-terraform
       - name: Set output
         id: set-ip
         run: |-
           echo "::set-output name=instance_public_ip::$(terraform output instance_public_ip)"
-        working-directory: ./terraform
+        working-directory: ./hrhouz-terraform
   deploy-app:
     runs-on: ubuntu-latest
     needs: deploy-infra
