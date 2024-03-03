@@ -7,8 +7,8 @@ env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   TF_STATE_BUCKET_NAME: ${{ vars.AWS_TF_STATE_BUCKET_NAME }}
-  PRIVATE_SSH_KEY: ${{ secrets.AWS_SSH_KEY_PRIVATE }}
-  PUBLIC_SSH_KEY: ${{ secrets.AWS_SSH_KEY_PUBLIC }}
+  # PRIVATE_SSH_KEY: ${{ secrets.AWS_SSH_KEY_PRIVATE }}
+  # PUBLIC_SSH_KEY: ${{ secrets.AWS_SSH_KEY_PUBLIC }}
   AWS_REGION: us-west-1
 
 jobs:
@@ -32,9 +32,9 @@ jobs:
         run: |-
           terraform plan -destroy \
           -var="region=us-west-1" \
-          -var="public_key=$PUBLIC_SSH_KEY" \
-          -var="private_key=$PRIVATE_SSH_KEY" \
-          -var="key_name=deployer-key" \
+          # -var="public_key=$PUBLIC_SSH_KEY" \
+          # -var="private_key=$PRIVATE_SSH_KEY" \
+          # -var="key_name=deployer-key" \
           -out=PLAN
         working-directory: ./hrhouz-terraform
       - name: Terraform Apply
