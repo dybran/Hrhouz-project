@@ -120,8 +120,8 @@ jobs:
           aws ssm send-command \
             --instance-ids ${{ needs.terraform.steps.apply.outputs.instance_id }} \
             --document-name "AWS-RunShellScript" \
-            --parameters "commands=sudo apt install -y docker && sudo usermod -aG docker $USER" \
-            --output text > /dev/null
+            --parameters "commands=sudo apt update && sudo apt install -y docker.io && sudo usermod -aG docker $USER"
+            # --output text > /dev/null
 
       - name: Authenticate Docker to ECR
         run: |
@@ -129,7 +129,7 @@ jobs:
             --instance-ids ${{ needs.terraform.steps.apply.outputs.instance_id }} \
             --document-name "AWS-RunShellScript" \
             --parameters "commands=$(aws ecr get-login-password --region ${{ vars.AWS_REGION }} | docker login --username AWS --password-stdin ${{ needs.build-push.steps.login-ecr.outputs.registry }})" \
-            --output text > /dev/null
+            # --output text > /dev/null
 
 
       - name: Pull Docker image from ECR
@@ -138,7 +138,7 @@ jobs:
             --instance-ids ${{ needs.terraform.steps.apply.outputs.instance_id }} \
             --document-name "AWS-RunShellScript" \
             --parameters "commands=docker pull ${{ needs.build-push.steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:latest" \
-            --output text > /dev/null
+            # --output text > /dev/null
 
       - name: Run Docker container on EC2
         run: |
@@ -146,4 +146,4 @@ jobs:
             --instance-ids ${{ needs.terraform.steps.apply.outputs.instance_id }} \
             --document-name "AWS-RunShellScript" \
             --parameters "commands=docker run ${{ needs.build-push.steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:latest" \
-            --output text > /dev/null
+            # --output text > /dev/null
