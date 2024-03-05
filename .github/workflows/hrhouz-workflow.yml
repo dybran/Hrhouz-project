@@ -126,7 +126,7 @@ jobs:
           aws ssm send-command \
             --instance-ids ${{ needs.terraform.steps.apply.outputs.instance_id }} \
             --document-name AWS-Linux-Packages \
-            --parameters key=package_name value=docker \
+            --parameters key=package_name,value=docker \
             --output text > /dev/null
 
       - name: Add user to docker group on EC2
