@@ -31,6 +31,7 @@ jobs:
         working-directory: ./hrhouz-ecr-ec2
 
       - name: Get Instance ID
+        uses: aws-actions/aws-cli@v3
         id: get-id
         run: |
           instance_id=$(aws ec2 describe-instances --filters "Name=tag:KEY,Values=hrhouz-server" --query 'Reservations[*].Instances[*].InstanceId' --output text)
