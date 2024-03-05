@@ -33,7 +33,7 @@ jobs:
       - name: Get Instance ID
         id: get-id
         run: |
-          instance_id=$(aws ec2 describe-instances --filters "Name=tag:KEY,Values=VALUE" --query 'Reservations[*].Instances[*].InstanceId' --output text)
+          instance_id=$(aws ec2 describe-instances --filters "Name=tag:KEY,Values=hrhouz-server" --query 'Reservations[*].Instances[*].InstanceId' --output text)
           # Set output using ID variable
           outputs: instance_id=$instance_id        
 
