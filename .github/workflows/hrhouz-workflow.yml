@@ -134,8 +134,9 @@ jobs:
           aws ssm send-command \
             --instance-ids ${{ needs.terraform.steps.apply.outputs.instance_id }} \
             --document-name "AWS-RunShellScript" \
-            --parameters "commands=$(aws ecr get-login-password --region ${{ vars.AWS_REGION }} | docker login --username AWS --password-stdin ${{ needs.build-push.steps.login-ecr.outputs.registry }}" \
+            --parameters "commands=$(aws ecr get-login-password --region ${{ vars.AWS_REGION }} | docker login --username AWS --password-stdin ${{ needs.build-push.steps.login-ecr.outputs.registry }})" \
             --output text > /dev/null
+
 
       - name: Pull Docker image from ECR
         run: |
