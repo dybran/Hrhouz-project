@@ -24,9 +24,9 @@ jobs:
 
       - name: Initialize Terraform
         run: terraform init
-        working-directory: ./hrhouz-terraform
+        working-directory: ./hrhouz-ecr-ec2
 
       - name: Destroy Infrastructure
         run: terraform destroy -auto-approve
-        working-directory: ./hrhouz-terraform
+        working-directory: ./hrhouz-ecr-ec2
 
