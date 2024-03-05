@@ -74,8 +74,19 @@ jobs:
           docker image rm ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:latest
 
       - name: Run Container on EC2 using AWS SSM
+
         run: |
-          aws ssm send-command --instance-ids ${{ needs.terraform.steps.appy.outputs.instance_id }} --document-name "AWS-RunShellScript" --parameters "commands=docker run -d -p 80:80 ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:${{ github.sha }}"
+          # Install Docker
+          aws ssm send-command \
+            --instance-ids ${{ needs.terraform.steps.apply.outputs.instance_id }} \
+            --document-name "AWS-InstallDocker" \
+            --parameters "workingDirectory=/tmp"
+
+          # Run container
+          aws ssm send-command \
+            --instance-ids ${{ needs.terraform.steps.apply.outputs.instance_id }} \
+            --document-name "AWS-RunShellScript" \
+            --parameters "commands=docker run -d -p 80:80 ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:${{ github.sha }}"
 
 
       # - name: Deploy to ECS
