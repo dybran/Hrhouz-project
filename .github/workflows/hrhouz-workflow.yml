@@ -27,16 +27,15 @@ jobs:
         working-directory: ./hrhouz-ecr-ec2
 
       - name: Apply Terraform Changes
+        id: apply
         run: terraform apply -auto-approve
         working-directory: ./hrhouz-ecr-ec2
 
-      - name: Get Instance ID
-        uses: aws-actions/aws-cli@v3
-        id: get-id
-        run: |
-          instance_id=$(aws ec2 describe-instances --filters "Name=tag:KEY,Values=hrhouz-server" --query 'Reservations[*].Instances[*].InstanceId' --output text)
-          # Set output using ID variable
-          outputs: instance_id=$instance_id        
+      # - name: Get Instance ID
+      #   id: get-id
+      # - uses: aws-actions/aws-cli@v3
+      #   with:
+      #     commands: aws ec2 describe-instances --filters "Name=tag:KEY,Values=VALUE" --query 'Reservations[*].Instances[*].InstanceId' --output text        
 
   build-push-run:
     runs-on: ubuntu-latest
@@ -76,7 +75,7 @@ jobs:
 
       - name: Run Container on EC2 using AWS SSM
         run: |
-          aws ssm send-command --instance-ids ${{ needs.terraform.steps.get-id.outputs.instance_id }} --document-name "AWS-RunShellScript" --parameters "commands=docker run -d -p 80:80 ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:${{ github.sha }}"
+          aws ssm send-command --instance-ids ${{ needs.terraform.steps.appy.outputs.instance_id }} --document-name "AWS-RunShellScript" --parameters "commands=docker run -d -p 80:80 ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:${{ github.sha }}"
 
 
       # - name: Deploy to ECS
