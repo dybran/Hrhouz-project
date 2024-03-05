@@ -34,7 +34,7 @@ jobs:
         id: get-id
         run: |
           # Replace with your specific command to get the ID
-          instance_id=$(aws ec2 describe-instances --output text | grep INSTANCE_ID | awk '{print $2}')
+          instance_id=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].InstanceId' --output text)
           # Set output using ID variable
           outputs: instance_id=$instance_id        
 
