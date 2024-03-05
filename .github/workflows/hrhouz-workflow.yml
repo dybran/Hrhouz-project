@@ -20,7 +20,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
+        uses: hashicorp/setup-terraform@v3
 
       - name: Initialize Terraform
         run: terraform init
@@ -31,19 +31,13 @@ jobs:
         run: terraform apply -auto-approve
         working-directory: ./hrhouz-ecr-ec2
 
-      # - name: Get Instance ID
-      #   id: get-id
-      # - uses: aws-actions/aws-cli@v3
-      #   with:
-      #     commands: aws ec2 describe-instances --filters "Name=tag:KEY,Values=VALUE" --query 'Reservations[*].Instances[*].InstanceId' --output text        
-
   build-push:
     runs-on: ubuntu-latest
     needs: terraform
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -126,7 +120,7 @@ jobs:
           aws ssm send-command \
             --instance-ids ${{ needs.terraform.steps.apply.outputs.instance_id }} \
             --document-name "AWS-RunShellScript" \
-            --parameters "commands=sudo yum install -y docker && sudo usermod -aG docker $USER" \
+            --parameters "commands=sudo apt install -y docker && sudo usermod -aG docker $USER" \
             --output text > /dev/null
 
       - name: Authenticate Docker to ECR
