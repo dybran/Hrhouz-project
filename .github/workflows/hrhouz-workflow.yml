@@ -108,8 +108,8 @@ jobs:
       - name: Install AWS CLI
         uses: unfor19/install-aws-cli-action@v1
         with:
-          aws-version: '2'
-          region: ${{ vars.AWS_REGION }}
+          version: '2'
+          aws-region: ${{ vars.AWS_REGION }}
 
       - name: Grant permission for SSM SendCommand
         run: aws iam attach-role-policy --role-name ${{ vars.SSM_ROLE_NAME }} --policy-arn arn:aws:iam::aws:policy/AmazonSSMFullAccess
