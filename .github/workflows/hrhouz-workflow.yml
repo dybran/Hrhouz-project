@@ -68,8 +68,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: terraform
-    needs: build-push
+    needs: [terraform, build-push]
 
     steps:
       - name: Checkout code
