@@ -2,7 +2,7 @@ FROM node:latest
 
 RUN mkdir parse
 
-ADD . /parse
+ADD ./parse-server-example/* /parse
 WORKDIR /parse
 RUN npm install
 
