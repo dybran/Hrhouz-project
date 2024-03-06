@@ -1,23 +1,14 @@
-# Use the parse-server image as the base image
-FROM parseplatform/parse-server:latest
+FROM node:latest
 
-# # Install parse-server-s3-adapter
-# USER root
-# RUN npm install parse-server-s3-adapter
-# RUN npm install aws-sdk
+RUN mkdir parse
 
-# # # Copy custom main.js file into the image
-# COPY ./app/data/main.js /parse-server/cloud/
-
-# RUN mkdir parse
-
-ADD ./parse-code .
-WORKDIR /parse-code
+ADD . /parse
+WORKDIR /parse
 RUN npm install
 
-ENV APP_ID hrhouz
-ENV MASTER_KEY Master_Key
-ENV DATABASE_URI mongodb://localhost:27017/dev
+ENV APP_ID setYourAppId
+ENV MASTER_KEY setYourMasterKey
+ENV DATABASE_URI setMongoDBURI
 
 # Optional (default : 'parse/cloud/main.js')
 # ENV CLOUD_CODE_MAIN cloudCodePath
