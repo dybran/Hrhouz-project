@@ -24,11 +24,7 @@ resource "aws_iam_role_policy_attachment" "ecr-policy-attachment" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess"
 }
 
-
-provider "aws" {
-  region = "your_aws_region"
-}
-
+# IAM role for EC2 to pull from ECR and AWS SSM to connect to EC@
 resource "aws_iam_role" "ec2_role" {
   name               = "ec2-ecr-ssm-role"
   assume_role_policy = jsonencode({
