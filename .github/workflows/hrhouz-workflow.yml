@@ -78,7 +78,7 @@ jobs:
         uses: unfor19/install-aws-cli-action@v1
         with:
           version: '2'
-          aws-region: ${{ vars.AWS_REGION }}
+          region: ${{ vars.AWS_REGION }}
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -90,7 +90,7 @@ jobs:
       - name: Start SSM Session
         run: |
           aws configure set region ${{ vars.AWS_REGION }}
-          aws ssm start-session --target ${{ needs.terraform.steps.apply.outputs.instance_id }}
+          aws ssm start-session --target ${{ needs.terraform.steps.apply.outputs.aws_instance.hrhouz-server.id }}
 
       - name: Authenticate Docker with ECR
         run: |
