@@ -4,8 +4,8 @@ const { ParseServer } = require('parse-server');
 // Initialize Parse Server
 const parseServer = new ParseServer({
   databaseURI: 'mongodb://localhost:27017/dev', // MongoDB URI
-  appId: 'myAppId',
-  masterKey: 'myMasterKey',
+  appId: 'hrhouzapp',
+  masterKey: '12345',
   serverURL: 'http://localhost:1337/parse', // URL to your Parse Server
   // Other configuration options...
 });
