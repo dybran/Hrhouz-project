@@ -7,4 +7,4 @@ RUN npm install parse-server-s3-adapter
 RUN npm install aws-sdk
 
 # Copy custom main.js file into the image
-COPY ./main.js /parse-server/cloud/main.js
+COPY ./cloud/main.js /parse-server/cloud/main.js
