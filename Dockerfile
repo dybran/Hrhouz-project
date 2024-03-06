@@ -9,10 +9,10 @@ FROM parseplatform/parse-server:latest
 # # # Copy custom main.js file into the image
 # COPY ./app/data/main.js /parse-server/cloud/
 
-RUN mkdir parse
+# RUN mkdir parse
 
-ADD ./parse-code/* /parse
-WORKDIR /parse
+ADD ./parse-code .
+WORKDIR /parse-code
 RUN npm install
 
 ENV APP_ID hrhouz
