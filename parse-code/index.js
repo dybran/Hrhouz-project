@@ -11,9 +11,9 @@ export const config = {
   databaseURI:
     process.env.DATABASE_URI || process.env.MONGODB_URI || 'mongodb://localhost:27017/dev',
   cloud: process.env.CLOUD_CODE_MAIN || __dirname + '/cloud/main.js',
-  appId: process.env.APP_ID || 'myAppId',
-  masterKey: process.env.MASTER_KEY || '', //Add your master key here. Keep it secret!
-  serverURL: process.env.SERVER_URL || 'http://localhost:1337/parse', // Don't forget to change to https if needed
+  appId: process.env.APP_ID || 'hrhouz',
+  masterKey: process.env.MASTER_KEY || 'master_key', //Add your master key here. Keep it secret!
+  serverURL: process.env.SERVER_URL || 'http://0.0.0.0:1337/parse/functions/testfunction', // Don't forget to change to https if needed
   liveQuery: {
     classNames: ['Posts', 'Comments'], // List of classes to support for query subscriptions
   },
