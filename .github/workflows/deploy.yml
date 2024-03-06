@@ -1,3 +1,53 @@
+# name: Deploy
+
+# on:
+#   workflow_dispatch:
+#     branches: [main]
+
+# jobs:
+  
+#   deploy:
+#     runs-on: ubuntu-latest
+    
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v2
+
+#       - name: Install AWS CLI
+#         uses: unfor19/install-aws-cli-action@v1
+#         with:
+#           version: '2'
+#           region: ${{ vars.AWS_REGION }}
+
+#       - name: Configure AWS Credentials
+#         uses: aws-actions/configure-aws-credentials@v4
+#         with:
+#           aws-region: ${{ vars.AWS_REGION }}
+#           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+#       - name: Install Docker
+#         run: |
+#           sudo apt-get update
+#           sudo apt-get install -y docker.io
+
+#       - name: Add user to Docker group
+#         run: |
+#           sudo usermod -aG docker $USER
+
+#       - name: Start SSM Session
+#         run: |
+#           aws ssm start-session --target i-05b762f116a7b9089
+
+#       - name: Authenticate Docker with ECR
+#         run: |
+#           aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin 939895954199.dkr.ecr.us-west-1.amazonaws.com/hrhouz-ecr
+
+#       - name: Pull and run container
+#         run: |
+#           docker pull 939895954199.dkr.ecr.us-west-1.amazonaws.com/hrhouz-ecr
+#           docker run -d 939895954199.dkr.ecr.us-west-1.amazonaws.com/hrhouz-ecr:latest
+
 name: Deploy
 
 on:
@@ -17,14 +67,18 @@ jobs:
         uses: unfor19/install-aws-cli-action@v1
         with:
           version: '2'
-          region: ${{ vars.AWS_REGION }}
+          region: ${{ secrets.AWS_REGION }}
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-region: ${{ vars.AWS_REGION }}
+          aws-region: ${{ secrets.AWS_REGION }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Remove conflicting package
+        run: |
+          sudo apt-get remove -y containerd
 
       - name: Install Docker
         run: |
