@@ -18,17 +18,22 @@ sudo apt-get update
 #install the latest version of docker
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
 
-sudo docker run hello-world
-
-# Add docker to user group
-sudo usermod -aG docker $USER
 
 # start and enable docker
 sudo systemctl start docker && sudo systemctl enable docker
 
-# Authenticate docker with ECR
-aws ecr get-login-password --region us-west-1 | docker login --username AWS --password-stdin 939895954199.dkr.ecr.us-west-1.amazonaws.com/hrhouz-ecr
+# Add docker to user group
+sudo usermod -aG docker $USER
 
-# Docker pull and run
-docker pull 939895954199.dkr.ecr.us-west-1.amazonaws.com/hrhouz-ecr
-docker run -d -p 80:80 939895954199.dkr.ecr.us-west-1.amazonaws.com/hrhouz-ecr:latest
+# Ensure Docker Engine installation
+sudo docker run hello-world
+
+# Install awscli
+sudo apt install awscli -y
+
+# # Authenticate docker with ECR
+# aws ecr get-login-password --region us-west-1 | docker login --username AWS --password-stdin 939895954199.dkr.ecr.us-west-1.amazonaws.com/hrhouz-ecr
+
+# # Docker pull and run
+# docker pull 939895954199.dkr.ecr.us-west-1.amazonaws.com/hrhouz-ecr
+# docker run -d -p 1337:80 939895954199.dkr.ecr.us-west-1.amazonaws.com/hrhouz-ecr:latest
