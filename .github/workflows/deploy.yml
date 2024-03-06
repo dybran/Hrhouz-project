@@ -78,7 +78,8 @@ jobs:
 
       - name: Remove conflicting package
         run: |
-          sudo apt-get remove -y containerd
+          sudo apt-get remove containerd containerd.io
+
 
       - name: Install Docker
         run: |
