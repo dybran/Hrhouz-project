@@ -19,6 +19,18 @@ jobs:
           version: '2'
           region: ${{ vars.AWS_REGION }}
 
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ vars.AWS_REGION }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Start SSM Session
+        run: |
+          # aws configure set region ${{ vars.AWS_REGION }}
+          aws ssm start-session --target i-05b762f116a7b9089
+
       - name: Install Docker
         run: |
           sudo apt-get update
@@ -35,20 +47,6 @@ jobs:
               stable"
           sudo apt-get update
           sudo apt-get install -y docker-ce docker-ce-cli containerd.io
-
-
-
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-region: ${{ vars.AWS_REGION }}
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-      - name: Start SSM Session
-        run: |
-          # aws configure set region ${{ vars.AWS_REGION }}
-          aws ssm start-session --target i-05b762f116a7b9089
 
 
       - name: Authenticate Docker with ECR
