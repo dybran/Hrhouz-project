@@ -90,7 +90,7 @@ jobs:
       - name: Start SSM Session
         run: |
           aws configure set region ${{ vars.AWS_REGION }}
-          aws ssm start-session --target ${{ aws ec2 describe-instances --filters "Name=tag:Name,Values=hrhouz-server" --query 'Reservations[*].Instances[*].InstanceId' --output text }}
+          aws ssm start-session --target aws ec2 describe-instances --filters "Name=tag:Name,Values=hrhouz-server" --query 'Reservations[*].Instances[*].InstanceId' --output text
 
       - name: Authenticate Docker with ECR
         run: |
