@@ -29,7 +29,7 @@ jobs:
       - name: Start SSM Session
         run: |
           # aws configure set region ${{ vars.AWS_REGION }}
-          aws ssm start-session --target i-05b762f116a7b9089
+          aws ssm start-session --target i-08844b8b6ba8eaa97
 
       - name: Install Docker
         run: |
