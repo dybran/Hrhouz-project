@@ -1,4 +1,4 @@
-  name: Deploy and run containers - EC2
+name: Deploy and run containers - EC2
 
 on:
   workflow_dispatch:
