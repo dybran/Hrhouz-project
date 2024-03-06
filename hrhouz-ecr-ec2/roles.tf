@@ -49,14 +49,6 @@ resource "aws_iam_role_policy_attachment" "ec2_ssm_access" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
-resource "aws_instance" "example_ec2" {
-  ami                    = "your_ami_id"
-  instance_type          = "your_instance_type"
-  iam_instance_profile   = aws_iam_instance_profile.ec2_instance_profile.name
-  tags = {
-    Name = "ExampleEC2Instance"
-  }
-}
 
 resource "aws_iam_instance_profile" "hrhouz-instance-profile" {
   name = "hrhouz-instance-profile"
