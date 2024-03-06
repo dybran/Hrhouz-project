@@ -54,7 +54,7 @@ jobs:
         run: |
           docker build -t ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:${{ github.sha }} .
           docker tag ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:${{ github.sha }} ${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:latest
-          echo "image=${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:latest" >> $GITHUB_ENV
+          echo "image=${{ steps.login-ecr.outputs.registry }}/${{ vars.ECR_REPOSITORY_NAME }}:latest"
 
       - name: Push Image to ECR
         run: |
@@ -90,7 +90,7 @@ jobs:
       - name: Start SSM Session
         run: |
           aws configure set region ${{ vars.AWS_REGION }}
-          aws ssm start-session --target ${{ needs.terraform.steps.apply.outputs.aws_instance.hrhouz-server.id }}
+          aws ssm start-session --target ${{ needs.terraform.steps.apply.outputs.instance_id }}
 
       - name: Authenticate Docker with ECR
         run: |
