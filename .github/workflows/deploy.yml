@@ -67,12 +67,12 @@ jobs:
         uses: unfor19/install-aws-cli-action@v1
         with:
           version: '2'
-          region: ${{ secrets.AWS_REGION }}
+          region: ${{ vars.AWS_REGION }}
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          region: ${{ secrets.AWS_REGION }}
+          aws-region: ${{ vars.AWS_REGION }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
