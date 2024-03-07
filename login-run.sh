@@ -14,12 +14,6 @@ docker pull ${ECR_URL}
 # Run Mongo container
 docker run --name parse-mongo-db -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=password -p 27017:27017 -d mongo
 
-# Wait for MongoDB to be ready before proceeding
-until docker exec parse-mongo-db mongo admin --eval "db.getMongo().isMaster().ismaster"; do
-  echo "Waiting for MongoDB to start..."
-  sleep 5
-done
-
 # Run Parse server container
 docker run --name parse-server -e PARSE_SERVER_APPLICATION_ID=hrhouz -e PARSE_SERVER_MASTER_KEY=master_key -e PARSE_SERVER_JAVASCRIPT_KEY=javascript_key -e PARSE_SERVER_ALLOW_ORIGIN=* -e PARSE_SERVER_DATABASE_URI=mongodb://admin:password@mongo/parse_server?authSource=admin --link parse-mongo-db:mongo -p 1337:1337 -d parseplatform/parse-server --masterKeyIps "0.0.0.0/0"
 
