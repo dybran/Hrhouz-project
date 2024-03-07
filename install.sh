@@ -30,3 +30,5 @@ sudo docker run hello-world
 
 # Install awscli
 sudo apt install awscli -y
+
+echo "All installation was successful!"
