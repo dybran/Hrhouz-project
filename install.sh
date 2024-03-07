@@ -30,10 +30,3 @@ sudo docker run hello-world
 
 # Install awscli
 sudo apt install awscli -y
-
-# # Authenticate docker with ECR
-# aws ecr get-login-password --region us-west-1 | docker login --username AWS --password-stdin 939895954199.dkr.ecr.us-west-1.amazonaws.com/hrhouz-ecr
-
-# # Docker pull and run
-# docker pull 939895954199.dkr.ecr.us-west-1.amazonaws.com/hrhouz-ecr
-# docker run -d -p 1337:80 939895954199.dkr.ecr.us-west-1.amazonaws.com/hrhouz-ecr:latest
