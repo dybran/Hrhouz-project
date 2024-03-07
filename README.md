@@ -12,13 +12,13 @@ __hrhouz-workflow.yml:__ This workflow performs the following actions in two sta
 
 
 ```
-_Secrets:_
+__Secrets__
 
 AWS_SECRET_ACCESS_KEY
 
 AWS_ACCESS_KEY_ID
 
-_Variables:_
+__Variables__
 
 AWS_REGION
 
