@@ -6,12 +6,12 @@ __Workflows:__
 
 __hrhouz-workflow.yml:__ This workflow performs the following actions in two stages:
 
-- _Stage 1:_ Utilizes terraform to create an ECR repository on AWS.
+- _Stage 1:_ Utilizes terraform to create an ECR repository and EC2 instance and all needed network resources.
 
 - _Stage 2:_ Builds and pushes a Docker image to the newly created ECR repository.
 
 
-
+```
 _Secrets:_
 
 AWS_SECRET_ACCESS_KEY
@@ -23,6 +23,8 @@ _Variables:_
 AWS_REGION
 
 ECR_REPOSITORY_NAME
+```
+
 
 __Note:__ To use this workflow, you need to configure the required secrets and variables in your GitHub environment.
 
