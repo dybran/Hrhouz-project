@@ -1,26 +1,8 @@
-FROM node:18
+FROM parseplatform/parse-server:latest
 
-RUN mkdir parse
+# Install parse-server-s3-adapter
+USER root
+RUN npm install parse-server-s3-adapter
+RUN npm install aws-sdk
 
-ADD ./parse-server-example/* /parse
-WORKDIR /parse
-RUN npm install
-
-ENV APP_ID setYourAppId
-ENV MASTER_KEY setYourMasterKey
-ENV DATABASE_URI setMongoDBURI
-
-# Optional (default : 'parse/cloud/main.js')
-# ENV CLOUD_CODE_MAIN cloudCodePath
-
-# Optional (default : '/parse')
-# ENV PARSE_MOUNT mountPath
-
-EXPOSE 1337
-
-# Uncomment if you want to access cloud code outside of your container
-# A main.js file must be present, if not Parse will not start
-
-# VOLUME /parse/cloud               
-
-CMD [ "npm", "start" ]
+COPY ./app/data /parse-server/cloud/
