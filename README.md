@@ -50,7 +50,7 @@ and
 
  Then run the __login-run.sh__ file
 
- `./login-run.sh <ECR_URL> <INSTANCE_IP>` `<ECR_IMAGE>`
+ `./login-run.sh <ECR_URL> <INSTANCE_IP> <ECR_IMAGE>`
 
  Access the parse sever using the IP address on port `4040`
 
