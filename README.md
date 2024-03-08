@@ -56,4 +56,4 @@ and
 
  `INSTANCE_IP:4040`
 
- You can destroy the infrastructure created by __hrhouz-workflow.yml__ using the __Destroy Infrastructure Workflow__..
+ You can destroy the infrastructure created by __hrhouz-workflow.yml__ using the __terrafom-destroy.yml__..
