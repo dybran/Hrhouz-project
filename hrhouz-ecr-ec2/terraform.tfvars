@@ -8,7 +8,7 @@ key-pair = "hrhouz-server"
 
 inst-type = "t2.micro"
 
-ami = "ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-arm64-server-20240301"
+ami = "ami-01765fe6754157915"
 
 owner = "099720109477"
 
