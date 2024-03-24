@@ -1,34 +1,37 @@
 #!/bin/bash
 
-# install docker and add user to the docker group
-# Add Docker's official GPG key:
-sudo apt-get update
-sudo apt-get install ca-certificates curl -y
-sudo install -m 0755 -d /etc/apt/keyrings -y
-sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-sudo chmod a+r /etc/apt/keyrings/docker.asc
+# Install Docker and add user to the Docker group
+set -e  # Exit script immediately if a command exits with a non-zero status
 
-# Add the repository to Apt sources:
+# Add Docker's official GPG key
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+# Set up Docker repository
 echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+  "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# Install required packages
+sudo apt-get update
+sudo apt-get install -y apt-transport-https ca-certificates curl gnupg-agent software-properties-common
+
+# Update package lists after adding Docker repository
 sudo apt-get update
 
-#install the latest version of docker
-sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+# Install Docker
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
+# Start and enable Docker service
+sudo systemctl start docker
+sudo systemctl enable docker
 
-# start and enable docker
-sudo systemctl start docker && sudo systemctl enable docker
-
-# Add docker to user group
+# Add the current user to the Docker group
 sudo usermod -aG docker $USER
 
 # Ensure Docker Engine installation
 sudo docker run hello-world
 
-# Install awscli
-sudo apt install awscli -y
+# Install AWS CLI
+sudo apt-get install awscli -y
 
-echo "All installation was successful!"
+echo "All installations were successful!"
