@@ -24,7 +24,7 @@ data "aws_ami" "latest_ubuntu" {
 
 # Launch EC2 instance with IAM Role
 resource "aws_instance" "hrhouz-server" {
-  ami                  = ami-01765fe6754157915
+  ami                  = data.aws_ami.latest_ubuntu.id
   instance_type        = var.inst-type
   subnet_id            = aws_subnet.hrhouz-subnet.id
   associate_public_ip_address = true
