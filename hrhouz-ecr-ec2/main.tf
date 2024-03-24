@@ -19,7 +19,12 @@ data "aws_ami" "latest_ubuntu" {
     values = ["hvm"]
   }
 
-  owners = [var.owner] # Canonical ID for Ubuntu AMIs
+  filter {
+    name   = "architecture" 
+    values = ["x86_64"]
+  }
+
+  owners = [var.owner]
 }
 
 # Launch EC2 instance with IAM Role
@@ -36,6 +41,7 @@ resource "aws_instance" "hrhouz-server" {
     Name = "hrhouz-server"
   }
 }
+
 
 
 
