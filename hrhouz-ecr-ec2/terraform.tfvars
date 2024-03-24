@@ -8,7 +8,7 @@ key-pair = "hrhouz-server"
 
 inst-type = "t2.micro"
 
-ami = "ami-02bfcfbf6fc7e8ce4"
+ami = "ubuntu/images/hvm-ssd/ubuntu*"
 
 owner = "099720109477"
 
